@@ -133,7 +133,7 @@ The saved default detail is `transcript`. After that pass, decide whether pixels
 
 - **Talking head, lecture audio, podcast:** answer from the transcript. Done.
 - **Visual content:** the title or description says tutorial, walkthrough or demo, or the transcript points at the screen ("look here", "as you can see", "this knob", "on the left"), or the question is about something seen (settings, layout, a patch, a diagram, hand position). Rerun with `--detail transcript --timestamps <cue times>` for just those moments, or `--detail balanced --start/--end` around a dense visual stretch. Say in one line that you added frames and why.
-- **Zotero citekey given instead of a URL:** resolve it with `zotero_get_metadata` and use its `URL` field.
+- **Zotero citekey given instead of a URL:** resolve it with `zotero_get_metadata` and use its `URL` field. After answering, save the answer as a child note with `zotero_create_note` (citekey, markdown, tag `watch-summary`). Open the note with `## Watch summary: <video title>` and a line giving the date and, if there was one, the question asked. If the item already has a `watch-summary` note, add a new note rather than editing the old one.
 
 ## Sampling and transcript cues
 
