@@ -136,7 +136,13 @@ The saved default detail is `transcript`. After that pass, decide whether pixels
 - **URL plus a request to save it to Zotero:** follow the "Adding a new item" section of `~/.config/watch/NOTE-FORMAT.md`, then continue as for a citekey. Without that request, never create Zotero items.
 - **Zotero citekey given instead of a URL:** resolve it with `zotero_get_metadata` and use its `URL` field. After answering, save the answer as a child note with `zotero_create_note` (citekey, markdown, tag `watch-summary`). Open the note with `## Watch summary: <video title>` and a line giving the date and, if there was one, the question asked. If the item already has a `watch-summary` note, add a new note rather than editing the old one. If `~/.config/watch/NOTE-FORMAT.md` exists, read it and write the note in that format. Also save the transcript, unless the item already has a `watch-transcript` or `transcript` note: save the report to a file, run `python3 "${SKILL_DIR}/scripts/transcript_note.py" <report>` to get clean ~30 s paragraphs, add a header line (date, caption source and whether automatic, "no speaker labels"), and attach it as a second child note tagged `watch-transcript`. Notes over ~30 KB go through the Zotero web API (pandoc to HTML, POST) instead of the MCP call.
 
-**Videos over an hour:** after `watch.py` finishes, hand the reading to a subagent (Agent tool, `model: "sonnet"`) so the transcript never enters the main conversation. Give it the report path, the user's question if any, the citekey, and the instructions above (including `NOTE-FORMAT.md` and `transcript_note.py`). It writes any Zotero notes itself and returns only the answer or summary to relay, plus note keys.
+**Videos over an hour:** after `watch.py` finishes, hand the reading to a subagent (Agent tool, `model: "sonnet"`) so the transcript never enters the main conversation. Give it the report path, the user's question if any, the citekey, and the instructions above (including `NOTE-FORMAT.md` and `transcript_note.py`). It writes the notes as local markdown files and does not post them; it returns the answer or summary to relay plus the note and transcript paths.
+
+**Check before saving or relaying, every time (subagent or not):**
+
+1. `python3 "${SKILL_DIR}/scripts/check_note.py" <note.md> <transcript.md> <vault>/10-19_Knowledge` flags quotes not in the transcript, timestamps past the end, and wikilinks with no file. Fix each finding by correcting the note against the transcript, never by loosening the check.
+2. Grep the transcript for five or more specific claims in the note (numbers, names, dates, case names). Each must appear.
+3. Only then post the notes to Zotero and relay the summary. Tell the user what the check caught.
 
 ## Sampling and transcript cues
 
