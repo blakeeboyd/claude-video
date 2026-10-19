@@ -115,10 +115,11 @@ def select_caption(info: dict, language: str = 'auto') -> dict | None:
         if keys:
             key = keys[0]
             # Auto mode must prefer original ASR to translated/dubbed metadata.
+            # AI-dubbed videos carry many -orig tracks; take the one matching the video's language.
             if kind == 'automatic' and language == 'auto' and originals:
-                key = originals[0]
+                key = next((k for k in keys if k.endswith('-orig')), originals[0])
             base = key.removesuffix('-orig')
-            provenance = 'original' if original and base.split('-')[0] == original.split('-')[0] else 'unknown'
+            provenance = 'original' if key.endswith('-orig') or (original and base.split('-')[0] == original.split('-')[0]) else 'unknown'
             if language != 'auto' and original and base.split('-')[0] != original.split('-')[0]:
                 provenance = 'requested translation'
             return {'key': key, 'language': base, 'kind': kind, 'provenance': provenance}

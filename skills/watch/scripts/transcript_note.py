@@ -40,6 +40,9 @@ def clean(lines, block=30):
         if seconds(ts) - seconds(start) >= block:
             ends = [m.end() for m in re.finditer(r'[.?!]"?(?=\s|$)', add)]
             cut = ends[0] if ends else None
+            # Unpunctuated auto-captions never end a sentence: break anyway at 2x block.
+            if cut is None and seconds(ts) - seconds(start) >= 2 * block:
+                cut = len(add)
         if cut is None:
             words.append(add)
             continue
@@ -63,6 +66,8 @@ if __name__ == "__main__":
         out = clean(demo)
         assert out == "**[0:00]** a b c d e.\n\n**[0:31]** g f", out
         assert new_part("x y", "z") == "z"
+        flat = clean([("0:00", "a"), ("0:40", "b"), ("1:00", "c"), ("1:10", "d")])
+        assert flat == "**[0:00]** a b c\n\n**[1:10]** d", flat
         print("ok")
     else:
         main()

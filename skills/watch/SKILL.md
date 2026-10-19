@@ -140,7 +140,7 @@ The saved default detail is `transcript`. After that pass, decide whether pixels
 
 **Check before saving or relaying, every time (subagent or not):**
 
-1. `python3 "${SKILL_DIR}/scripts/check_note.py" <note.md> <transcript.md> <vault>/10-19_Knowledge` flags quotes not in the transcript, timestamps past the end, and wikilinks with no file. Fix each finding by correcting the note against the transcript, never by loosening the check.
+1. `python3 "${SKILL_DIR}/scripts/check_note.py" <note.md> <transcript.md> <vault>` flags quotes not in the transcript, timestamps past the end, and wikilinks with no file. Fix each finding by correcting the note against the transcript, never by loosening the check.
 2. Grep the transcript for five or more specific claims in the note (numbers, names, dates, case names). Each must appear.
 3. Only then post the notes to Zotero and relay the summary. Tell the user what the check caught.
 
@@ -182,4 +182,4 @@ For follow-ups, reuse evidence already viewed before rerunning. Remove only the 
 - Runtime artifacts live in this run's working directory. User settings/keys live in `~/.config/watch/.env`; cwd `.env` is a cloud-key fallback. POSIX writes use mode 0600; Windows ACLs are not audited. Use a Linux-home config in WSL, since Windows-mounted homes have different permission semantics.
 - The managed environment lives at `~/.cache/watch/whisperx-venv`, outside the plugin. Model caches normally live at `~/.cache/huggingface` and `~/.cache/torch/hub`. uv also caches packages and managed Python. Reinstalling the skill does not remove these.
 
-Bundled scripts: `watch.py`, `download.py`, `frames.py`, `transcribe.py`, `whisper.py`, `local_whisperx.py`, `gemini.py`, `config.py`, `runtime.py`, and `setup.py` under `scripts/`. The base runtime uses only Python's standard library; optional WhisperX dependencies remain in its separate process/environment.
+Bundled scripts: `watch.py`, `download.py`, `frames.py`, `transcribe.py`, `whisper.py`, `local_whisperx.py`, `gemini.py`, `config.py`, `runtime.py`, `setup.py`, `transcript_note.py` and `check_note.py` under `scripts/`. The base runtime uses only Python's standard library; optional WhisperX dependencies remain in its separate process/environment.

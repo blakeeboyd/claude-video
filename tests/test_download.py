@@ -23,6 +23,14 @@ def test_original_track_overrides_dubbed_metadata(language):
     assert download.select_caption(info)['key'] == f'{language}-orig'
 
 
+def test_dubbed_video_with_many_original_tracks_keeps_its_language():
+    # Class with Kate 5OTDtMyRXno: AI dubbing adds ar-orig, fr-orig ... beside en-orig.
+    info = {'extractor_key': 'Youtube', 'language': 'en-US',
+            'automatic_captions': _tracks('ar-orig', 'ar', 'en', 'en-orig', 'fr-orig')}
+    track = download.select_caption(info)
+    assert (track['key'], track['provenance']) == ('en-orig', 'original')
+
+
 def test_unknown_language_prefers_english():
     # "Me at the zoo" reports no language and has manual de + en tracks.
     picked = download.select_caption({'extractor_key': 'Youtube', 'subtitles': _tracks('de', 'en')})
